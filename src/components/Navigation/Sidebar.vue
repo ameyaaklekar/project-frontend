@@ -1,7 +1,8 @@
 <template>
   <v-navigation-drawer
-    v-model="drawer"
+    v-model="toggleDrawer"
     :mini-variant.sync="mini"
+    clipped
     app
   >
     <v-list-item class="px-2">
@@ -22,17 +23,47 @@
     <v-divider></v-divider>
 
     <v-list>
-      <v-list-item 
-        v-for="item in menuItems" :key="item.title"
-        link 
-        :to="item.url">
-        <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-item-icon>
+      <template v-for="item in menuItems">
+        <v-list-group
+          :prepend-icon="item.icon"
+          no-action
+          :key="item.title"
+          v-if="item.children"
+        >
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
+            </v-list-item-content>
+          </template>
 
-        <v-list-item-title>{{ item.title }}</v-list-item-title>
-      </v-list-item>
+          <v-list-item
+            v-for="child in item.children"
+            :key="child.title"
+            :to="child.url"
+            :exact="child.exact"
+          >
+            <v-list-item-content>
+              <v-list-item-title v-text="child.title"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+         <v-list-item 
+          link 
+          v-else
+          :key="item.title"
+          :to="item.url"
+          :exact="item.exact"
+          class="primary--text"
+          >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </template>
     </v-list>
+    
   </v-navigation-drawer>
 </template>
 
@@ -43,22 +74,71 @@ export default {
     drawer: Boolean, 
     mini: Boolean
   },
+  computed: {
+    toggleDrawer: {
+      get() {
+        return this.drawer
+      },
+      set(value) {
+        return value
+      }
+    }
+  },
   data: () => ({ 
     menuItems: [
       {
         title: 'Dashboard',
         icon: 'mdi-view-dashboard',
-        url: '/'
+        exact: true,
+        url: {
+          name: 'Dashboard'
+        }
       },
       {
         title: 'Suppliers',
         icon: 'mdi-factory',
-        url: '/suppliers'
+        url: {
+          name: 'Suppliers'
+        },
       },
       {
-        title: 'Stock',
+        title: 'Stocks',
         icon: 'mdi-store',
-        url: '/stock'
+        children: [
+          {
+            title: 'Available Stocks',
+            url: '/stocks', 
+          },
+          {
+            title: 'Stock List',
+            url: '/stock-list', 
+          }
+        ]
+      },
+      {
+        title: 'Stock Orders',
+        icon: 'mdi-receipt',
+        url: '/orders'
+      },
+      {
+        title: 'Recepies',
+        icon: 'mdi-food',
+        url: '/recepies'
+      },
+      {
+        title: 'Reports',
+        icon: 'mdi-file-chart',
+        url: '/reports'
+      },
+      {
+        title: 'Budget',
+        icon: 'mdi-cash-multiple',
+        url: '/budget'
+      },
+      {
+        title: 'Roster',
+        icon: 'mdi-calendar-clock',
+        url: '/roster'
       },
       {
         title: 'Employees',
@@ -66,10 +146,6 @@ export default {
         url: '/employees'
       },
     ]
-  })
+  }),
 }
 </script>
-
-<style>
-
-</style>

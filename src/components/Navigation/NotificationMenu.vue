@@ -14,7 +14,8 @@
         v-bind="attrs"
         v-on="on"
       >
-        <v-icon>mdi-bell-alert</v-icon>
+        <v-icon v-if="notifications.length > 0">mdi-bell-ring</v-icon>
+        <v-icon v-else>mdi-bell</v-icon>
       </v-btn>
     </template>
 
@@ -22,7 +23,7 @@
       max-width="500"
     >
       <v-list three-line>
-        <template v-for="(item, index) in settingsMenu">
+        <template v-for="(item, index) in notifications">
           <v-subheader
             v-if="item.header"
             :key="item.header"
@@ -60,7 +61,7 @@ export default {
 
   data: () => ({
     menu: false,
-    settingsMenu: [
+    notifications: [
       { header: 'Today' },
       {
         avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',

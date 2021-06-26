@@ -1,8 +1,11 @@
 <template>
-  <v-app id="inspire">
+  <v-app>
     <Navigation/>
     <v-main>
-      <router-view/>
+      <v-container fluid>
+        <div style="height: 5px"></div>
+        <router-view/>
+      </v-container>
     </v-main>
   </v-app>
 </template>

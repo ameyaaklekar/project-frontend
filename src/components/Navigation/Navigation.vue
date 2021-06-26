@@ -1,7 +1,11 @@
 <template>
   <nav>
-    <Sidebar v-bind:drawer="drawer" v-bind:mini="mini" />
-    <v-app-bar app>
+    <v-app-bar 
+      app
+      tile
+      short
+      clipped-left
+    >
       <v-app-bar-nav-icon @click="() => { drawer = !drawer; mini = false }"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Application</v-toolbar-title>
@@ -59,6 +63,8 @@
         </v-card>
       </v-menu>
     </v-app-bar>
+    <Sidebar v-bind:drawer="drawer" v-bind:mini="mini" />
+
   </nav>
 </template>
 
@@ -91,7 +97,7 @@ export default {
         url: '/stock'
       }
     ]
-  })
+  }),
 }
 </script>
 
