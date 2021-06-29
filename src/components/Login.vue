@@ -17,6 +17,7 @@
       ref="form"
       v-model="valid"
       lazy-validation
+      @submit.prevent="submit"
     > 
       <v-text-field
         v-model="form.email"
@@ -37,7 +38,7 @@
         :disabled="!valid"
         color="success"
         class="mr-4"
-        @click="validate"
+        type="submit"
       >
         Sign In
       </v-btn>
@@ -46,6 +47,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Login',
 
@@ -61,6 +64,13 @@ export default {
     validate () {
       this.$refs.form.validate()
     },
+    async submit () {
+      await axios.get('csrf-cookie')
+      var login = await axios.post('login', this.form)
+
+      var user = await axios.get('user')
+      console.log(user)
+    }
   },
 }
 </script>

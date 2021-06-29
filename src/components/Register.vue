@@ -17,6 +17,7 @@
       ref="form"
       v-model="valid"
       lazy-validation
+      @submit.prevent="submit"
     >
       <v-row>
         <v-col
@@ -24,7 +25,7 @@
           sm="6"
         >
           <v-text-field
-            v-model="form.firstname"
+            v-model="form.firstName"
             label="First Name"
             required
           ></v-text-field>
@@ -35,7 +36,7 @@
           sm="6"
         >
           <v-text-field
-            v-model="form.lastname"
+            v-model="form.lastName"
             label="Last Name"
             required
           ></v-text-field>
@@ -56,6 +57,7 @@
             auto-select-first
             :items="countries"
             label="Country"
+            v-model="form.country"
           ></v-autocomplete>
         </v-col>
         <v-col
@@ -99,7 +101,7 @@
         :disabled="!valid"
         color="success"
         class="mr-4"
-        @click="validate"
+        type="submit"
       >
         Submit
       </v-btn>
@@ -108,6 +110,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Register',
 
@@ -131,6 +135,13 @@ export default {
     validate () {
       this.$refs.form.validate()
     },
+    submit() {
+      console.log(this.form)
+      axios.get('csrf-cookie').then((response) => {
+        axios.post('register', this.form)
+      })
+
+    }
   },
 }
 </script>
